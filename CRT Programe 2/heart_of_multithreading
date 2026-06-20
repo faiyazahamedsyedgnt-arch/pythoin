@@ -1,0 +1,135 @@
+'''
+1.race condition 
+2.Synchronisation
+3.lock
+4.RLock
+'''
+
+# why we need synchronization?
+
+'''
+balance = 1000
+
+Thread-1 --withdraw 500
+Thread-2 --withdraw 700
+
+both are accessing the same variable
+without proper control
+
+
+incoreect balance
+wrong transactions 
+data corrupt
+
+to avoid the above we will use:
+synchronization
+this is a process of controlling access to shared 
+resources so that only one thread modifies  at a time 
+
+lock:
+shared resources : any variable,file,database,object
+
+
+example :
+
+count = 0
+if multiple threads modifies count simultaneously
+
+
+#Race Condition:
+occurs when multiple threas access and modified share data simultaneously
+causing unpredictable outputs
+
+
+
+'''
+
+
+# count = 0
+# count +=1
+# print(count)
+
+
+# #write with threads 
+# import threading
+# count = 0
+# def increament():
+#     global count
+#     count +=1
+   
+# threads= []
+# for i in range(1000):
+#     t = threading.Thread(target=increament)  
+#     threads.append(t)
+#     t.start()
+
+# for t in threads:
+#     t.join()
+
+# print(count) 
+
+
+
+
+# critical section:
+# code section  where shared resources are 
+# accessed is called critical section 
+# count +=1 --->critical section
+
+
+# to avoid the race condition?
+# one thread should enter critical section  at a time:
+
+# solution: Lock 
+
+# what is a lock?
+# synchronization mechanism 
+# that allows only one thread to execute  
+# a critical section at a time.
+
+# example:ATM 
+
+
+# thread A acquires lock
+# others threads will wait 
+# thread A releases lock
+# next thread gets lock
+
+
+# import threading
+# lock = threading.lock()
+
+
+
+# #to apply lock
+# lock acquire()
+
+
+# # to release
+# lock.release()
+
+
+
+import threading
+count = 0 
+lock=threading.Lock()
+
+def increament():
+    global count
+    for i in range(10000):
+        with lock:
+        #critical section
+            count +=1
+    
+t1 =threading.Thread(target=increament)        
+t2 =threading.Thread(target=increament)
+
+t1.start()
+t2.start()
+
+t1.join()
+t2.join()
+print(count)
+
+
+
